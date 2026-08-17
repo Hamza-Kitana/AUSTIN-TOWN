@@ -7,10 +7,12 @@ import {
   Flag,
   Gavel,
   Hospital,
+  Pill,
   Scale,
   ShieldCheck,
   Skull,
   SquareParking,
+  Swords,
   UtensilsCrossed,
   Wrench,
 } from "lucide-react";
@@ -40,10 +42,14 @@ type RuleSection = {
   intros?: { title: string; text: string }[];
   rulesTitle?: string;
   rules: string[];
-  blocks?: { title: string; rules: string[] }[];
+  blocks?: {
+    title: string;
+    rules: string[];
+    groups?: { title: string; hint?: string; items: { label: string; value: string; caption?: string; icon?: ComponentType<{ className?: string; strokeWidth?: number }> }[] }[];
+  }[];
   notesTitle?: string;
   notes?: string[];
-  groups?: { title: string; hint?: string; items: { label: string; value: string }[] }[];
+  groups?: { title: string; hint?: string; items: { label: string; value: string; caption?: string; icon?: ComponentType<{ className?: string; strokeWidth?: number }> }[] }[];
   levels?: { code: string; duration: string; tone: "warn1" | "warn2" | "warn3" | "warn4" | "ban" }[];
   decay?: { from: string; to: string }[];
   zones?: {
@@ -210,7 +216,7 @@ const sections: RuleSection[] = [
     en: "GANGS",
     icon: Flag,
     title: "قوانين العصابات",
-    rulesTitle: "القوانين العامة للعصابة",
+    rulesTitle: "القوانين العامة",
     rules: [
       "يمنع التعاون بين العصابات في الحرب ضد العصابة أو الشرطة، ويُسمح الصلح بين العصابتين والاتفاقيات بينهم في الأعمال والسرقات فقط وليس للفايت.",
       "يجب احترام حارات العصابات والخوف على حياتك، وفي حال دخول شخص لمنطقة العصابات يجب عليك تقمص الأر بي والتفاهم معه والتصرف على حسب حالة الشخص. موظفو الوظائف العامة والوظائف الحكومية لا يحق لأي عصابة التدخل فيهم إلا في حالة الاستفزاز.",
@@ -238,7 +244,7 @@ const sections: RuleSection[] = [
     ],
     blocks: [
       {
-        title: "قوانين الحروب والفلاقات",
+        title: "الحروب والفلاقات",
         rules: [
           "بمجرد أنك وضعت علمك في منطقة معينة راح تتكون بقعة خاصة لعصابتك.",
           "يجب على جميع أفراد عصابتك أن يكونون مسجلين باللابتوب، وفي حال تم رصد شخص ليس لديه رول بالدسكورد أو مو مسجل باللابتوب راح يتم تحذير العصابة مباشرة.",
@@ -259,6 +265,16 @@ const sections: RuleSection[] = [
           "في حال مشاركتك بأي فايت يخص العصابات لابد من وجود تصوير للفايت لمدة 24 ساعة، في حال لم يتم استدعاءك احذفه، وفي حال عدم وجوده سيتم محاسبة العصابة.",
           "في حال كان الفايت مع علم غير مترابط مع علمك بإمكانك التلويت بعد انتهاء الفايت ويكون التلويت للطرف المدافع فقط.",
         ],
+        groups: [
+          {
+            title: "أعداد الحروب",
+            items: [
+              { label: "Remove Flag", value: "8 vs 8", caption: "إزالة العلم", icon: Flag },
+              { label: "Contest Flag", value: "6 vs 6", caption: "الكونتست", icon: Swords },
+              { label: "Sell Drugs", value: "4 vs 4", caption: "بيع المخدرات", icon: Pill },
+            ],
+          },
+        ],
       },
       {
         title: "شروط وضع الفلاق",
@@ -272,16 +288,6 @@ const sections: RuleSection[] = [
           "يمنع وضع أي فلاق آخر دون وصول الفلاق السابق لفل ماكس (100).",
           "يمنع وضع أي أعلام أخرى في حال فلاق سابق نقص البوينت عن 100. (يجب عليك تلفيله ومن ثم وضع الفلاق)",
           "في حال تم كسر سلسلة الأعلام معاك مهلة 48 ساعة لربط السلسلة من جديد وإلا سيتم إزالة بقية الأعلام.",
-        ],
-      },
-    ],
-    groups: [
-      {
-        title: "أعداد الحروب والفلاقات",
-        items: [
-          { label: "Remove Flag", value: "8 vs 8" },
-          { label: "Contest Flag", value: "6 vs 6" },
-          { label: "Sell Drugs", value: "4 vs 4" },
         ],
       },
     ],
@@ -366,9 +372,14 @@ const sections: RuleSection[] = [
 
 function RulesPage() {
   const [active, setActive] = useState(0);
+  const [subTab, setSubTab] = useState(0);
   const current = sections[active] ?? sections[0];
   if (!current) return null;
   const CurrentIcon = current.icon;
+  const subChapters = current.blocks?.length
+    ? [{ title: current.rulesTitle ?? "عام", rules: current.rules, groups: current.groups }, ...current.blocks]
+    : null;
+  const activeChapter = subChapters?.[subTab] ?? subChapters?.[0];
 
   return (
     <div className="w-full px-4 pb-24 pt-28 sm:px-6 lg:px-8">
@@ -413,7 +424,10 @@ function RulesPage() {
               <button
                 key={s.n}
                 type="button"
-                onClick={() => setActive(i)}
+                onClick={() => {
+                  setActive(i);
+                  setSubTab(0);
+                }}
                 className={`group flex items-center justify-between gap-3 rounded-2xl px-4 py-3 text-right transition-all duration-300 ${
                   selected
                     ? "glass neon-ring"
@@ -518,7 +532,24 @@ function RulesPage() {
               </div>
             ) : null}
 
-            {current.rulesTitle ? (
+            {subChapters ? (
+              <div className="flex flex-wrap gap-2 pb-2">
+                {subChapters.map((ch, i) => (
+                  <button
+                    key={ch.title}
+                    type="button"
+                    onClick={() => setSubTab(i)}
+                    className={`rounded-full border px-4 py-2 font-display text-xs tracking-wide transition-all ${
+                      subTab === i
+                        ? "border-accent/50 bg-accent/15 text-accent neon-ring"
+                        : "border-border/70 bg-secondary/40 text-muted-foreground hover:border-accent/30 hover:text-foreground"
+                    }`}
+                  >
+                    {ch.title}
+                  </button>
+                ))}
+              </div>
+            ) : current.rulesTitle ? (
               <h3 className="pt-2 font-display text-sm tracking-widest text-accent">{current.rulesTitle}</h3>
             ) : null}
 
@@ -581,33 +612,59 @@ function RulesPage() {
               </div>
             ) : null}
 
-            {current.rules.map((rule, i) => (
-              <div
-                key={rule}
-                style={{ animationDelay: `${(current.intros?.length ?? 0) * 70 + i * 40}ms` }}
-                className="animate-rise flex gap-4 rounded-2xl bg-secondary/35 p-4 sm:p-5"
-              >
-                <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary/20 font-display text-sm text-accent">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <p className="pt-1.5 text-sm leading-7 text-foreground/90 sm:text-base">{rule}</p>
+            {activeChapter?.groups?.map((group) => (
+              <div key={group.title} className="grid gap-3 sm:grid-cols-3">
+                {group.items.map((item) => {
+                  const ItemIcon = item.icon;
+                  return (
+                    <article
+                      key={item.label}
+                      className="group relative overflow-hidden rounded-2xl border border-accent/25 bg-accent/8 p-5 text-center"
+                    >
+                      <div className="absolute -left-8 -top-8 size-24 rounded-full bg-accent/15 blur-2xl" />
+                      {ItemIcon ? (
+                        <span className="relative mx-auto mb-3 grid size-12 place-items-center rounded-2xl bg-accent/15 neon-ring">
+                          <ItemIcon className="size-6 text-accent" strokeWidth={1.6} />
+                        </span>
+                      ) : null}
+                      <p dir="ltr" className="relative font-display text-3xl tracking-wide text-accent">
+                        {item.value}
+                      </p>
+                      <p dir="ltr" className="relative mt-2 text-sm text-foreground/85">
+                        {item.label}
+                      </p>
+                      {item.caption ? (
+                        <p className="relative mt-1 text-xs text-muted-foreground">{item.caption}</p>
+                      ) : null}
+                    </article>
+                  );
+                })}
               </div>
             ))}
 
-            {current.blocks?.map((block) => (
-              <div key={block.title} className="space-y-3 pt-4">
-                <h3 className="font-display text-sm tracking-widest text-accent">{block.title}</h3>
-                {block.rules.map((rule, i) => (
-                  <div
-                    key={rule}
-                    className="animate-rise flex gap-4 rounded-2xl bg-secondary/35 p-4 sm:p-5"
+            {(activeChapter?.rules ?? current.rules).map((rule, i) => (
+              <div
+                key={`${activeChapter?.title ?? current.n}-${rule}`}
+                style={{ animationDelay: `${i * 35}ms` }}
+                className={`animate-rise relative overflow-hidden rounded-2xl p-4 sm:p-5 ${
+                  subChapters
+                    ? "border border-border/60 bg-secondary/30"
+                    : "bg-secondary/35"
+                }`}
+              >
+                {subChapters ? (
+                  <span className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-accent to-transparent" />
+                ) : null}
+                <div className="flex gap-4">
+                  <span
+                    className={`grid size-10 shrink-0 place-items-center rounded-xl font-display text-sm text-accent ${
+                      subChapters ? "bg-accent/15" : "bg-primary/20"
+                    }`}
                   >
-                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary/20 font-display text-sm text-accent">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <p className="pt-1.5 text-sm leading-7 text-foreground/90 sm:text-base">{rule}</p>
-                  </div>
-                ))}
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <p className="pt-1.5 text-sm leading-7 text-foreground/90 sm:text-base">{rule}</p>
+                </div>
               </div>
             ))}
 
