@@ -1,6 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type ComponentType } from "react";
-import { BookOpen, Flag, Gavel, Scale, ShieldCheck, Skull, UtensilsCrossed } from "lucide-react";
+import {
+  BookOpen,
+  Briefcase,
+  Building2,
+  Flag,
+  Gavel,
+  Hospital,
+  Scale,
+  ShieldCheck,
+  Skull,
+  SquareParking,
+  UtensilsCrossed,
+  Wrench,
+} from "lucide-react";
 import city from "@/assets/city-hero.jpg";
 
 export const Route = createFileRoute("/rules")({
@@ -33,6 +46,12 @@ type RuleSection = {
   groups?: { title: string; hint?: string; items: { label: string; value: string }[] }[];
   levels?: { code: string; duration: string; tone: "warn1" | "warn2" | "warn3" | "warn4" | "ban" }[];
   decay?: { from: string; to: string }[];
+  zones?: {
+    title: string;
+    desc: string;
+    tags?: string[];
+    icon: ComponentType<{ className?: string; strokeWidth?: number }>;
+  }[];
 };
 
 const sections: RuleSection[] = [
@@ -274,17 +293,43 @@ const sections: RuleSection[] = [
     title: "المناطق الآمنة",
     intros: [
       {
-        title: "قانون المنطقة الآمنة",
+        title: "ممنوع الإجرام",
         text: "يمنع إطلاق النار فيها أو عمل إجرام فيها تحت أي ظرف.",
       },
     ],
-    rules: [
-      "الشقق بكل أنواعها.",
-      "المستشفى ومركز الشرطة.",
-      "ورشات التصليح.",
-      "جميع الوظائف وتشمل: الموارد، السطحة، التاكسي، السمك، وأي وظيفة مستقبلاً.",
-      "المطاعم والمقاهي منطقة استبدال الموارد.",
-      "جميع مواقف المناطق الآمنة يمنع فيها أي عمل إجرامي مثل: مواقف القسم، المستشفى، مواقف الشقق الخلفية، إلى آخره.",
+    rules: [],
+    zones: [
+      {
+        title: "الشقق",
+        desc: "الشقق بكل أنواعها مناطق آمنة بالكامل.",
+        icon: Building2,
+      },
+      {
+        title: "المستشفى ومركز الشرطة",
+        desc: "يمنع أي عمل إجرامي داخل المستشفى ومركز الشرطة.",
+        icon: Hospital,
+      },
+      {
+        title: "ورشات التصليح",
+        desc: "جميع ورش التصليح مناطق آمنة أثناء العمل والتواجد.",
+        icon: Wrench,
+      },
+      {
+        title: "جميع الوظائف",
+        desc: "مناطق الوظائف الحكومية والعامة آمنة، ويشمل ذلك أي وظيفة مستقبلاً.",
+        tags: ["الموارد", "السطحة", "التاكسي", "السمك"],
+        icon: Briefcase,
+      },
+      {
+        title: "المطاعم والمقاهي",
+        desc: "منطقة استبدال الموارد، ويمنع فيها الإجرام.",
+        icon: UtensilsCrossed,
+      },
+      {
+        title: "مواقف المناطق الآمنة",
+        desc: "يمنع فيها أي عمل إجرامي، مثل مواقف القسم والمستشفى ومواقف الشقق الخلفية إلى آخره.",
+        icon: SquareParking,
+      },
     ],
     notesTitle: "تنويه",
     notes: ["جميع القوانين قابلة للتغيير في أي وقت."],
@@ -362,6 +407,7 @@ function RulesPage() {
               s.rules.length +
               (s.intros?.length ?? 0) +
               (s.levels?.length ?? 0) +
+              (s.zones?.length ?? 0) +
               (s.blocks?.reduce((total, block) => total + block.rules.length, 0) ?? 0);
             return (
               <button
@@ -417,14 +463,60 @@ function RulesPage() {
               <article
                 key={intro.title}
                 style={{ animationDelay: `${i * 70}ms` }}
-                className="animate-rise rounded-2xl bg-secondary/35 p-5 sm:p-6"
+                className={`animate-rise rounded-2xl p-5 sm:p-6 ${
+                  current.zones?.length
+                    ? "border border-accent/35 bg-accent/10 text-center neon-ring"
+                    : "bg-secondary/35"
+                }`}
               >
-                <h3 className="font-display text-base tracking-wide text-accent sm:text-lg">
+                <h3
+                  className={`font-display tracking-wide text-accent ${
+                    current.zones?.length ? "text-xl sm:text-2xl" : "text-base sm:text-lg"
+                  }`}
+                >
                   {intro.title}
                 </h3>
                 <p className="mt-2 text-sm leading-7 text-foreground/90 sm:text-base">{intro.text}</p>
               </article>
             ))}
+
+            {current.zones?.length ? (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {current.zones.map((zone, i) => {
+                  const Icon = zone.icon;
+                  return (
+                    <article
+                      key={zone.title}
+                      style={{ animationDelay: `${i * 70}ms` }}
+                      className="animate-rise group relative overflow-hidden rounded-2xl border border-accent/20 bg-secondary/30 p-5"
+                    >
+                      <div className="absolute -left-8 -top-8 size-24 rounded-full bg-accent/10 blur-2xl transition-opacity group-hover:opacity-100" />
+                      <div className="relative flex items-start gap-4">
+                        <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-accent/15 neon-ring">
+                          <Icon className="size-6 text-accent" strokeWidth={1.6} />
+                        </span>
+                        <div>
+                          <h3 className="font-display text-base tracking-wide sm:text-lg">{zone.title}</h3>
+                          <p className="mt-1 text-sm leading-6 text-muted-foreground">{zone.desc}</p>
+                          {zone.tags?.length ? (
+                            <div className="mt-3 flex flex-wrap gap-1.5">
+                              {zone.tags.map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="rounded-full bg-accent/15 px-2.5 py-1 text-[11px] text-accent"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            ) : null}
 
             {current.rulesTitle ? (
               <h3 className="pt-2 font-display text-sm tracking-widest text-accent">{current.rulesTitle}</h3>
