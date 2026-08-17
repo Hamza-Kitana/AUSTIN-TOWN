@@ -115,14 +115,14 @@ function DiscordPage() {
           اقرأ القوانين، خذ رولك، وابدأ قصتك داخل المدينة.
         </p>
         <a
-          href="https://discord.gg/austintown"
+          href="https://discord.gg/aust"
           target="_blank"
           rel="noreferrer"
           className="mt-6 inline-block rounded-xl bg-primary px-8 py-3 font-display text-sm tracking-widest text-primary-foreground transition-transform duration-300 hover:-translate-y-1 neon-ring"
         >
           دخول السيرفر
         </a>
-        <p className="mt-4 text-xs text-muted-foreground">discord.gg/austintown</p>
+        <p className="mt-4 text-xs text-muted-foreground">discord.gg/aust</p>
       </div>
     </div>
   );

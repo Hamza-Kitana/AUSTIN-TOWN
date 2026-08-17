@@ -335,7 +335,7 @@ function ItemModal({ item, onClose }: { item: StoreItem; onClose: () => void }) 
           </ul>
 
           <a
-            href="https://discord.gg/austintown"
+            href="https://discord.gg/aust"
             target="_blank"
             rel="noreferrer"
             className="mt-6 block rounded-xl bg-primary py-3 text-center font-display text-sm tracking-widest text-primary-foreground transition-transform duration-300 hover:-translate-y-0.5 neon-ring"
