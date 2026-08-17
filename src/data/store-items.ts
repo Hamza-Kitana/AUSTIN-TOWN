@@ -114,7 +114,7 @@ export const storeItems: StoreItem[] = [
   },
   {
     id: "proj-1",
-    name: "مطعم Austin Grill",
+    name: "مطعم سنتر بنز",
     category: "projects",
     images: [grillExterior, restaurant, grillKitchen],
     tag: "دخل ثابت",
