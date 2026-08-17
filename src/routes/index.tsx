@@ -12,7 +12,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "أوستن تاون CFW RP: مدينة FiveM للعب الأدوار. القوانين، المتجر (سيارات، مشاريع، كازيات) والديسكورد في مكان واحد.",
+          "أوستن تاون CFW RP: مدينة FiveM للعب الأدوار. القوانين، المتجر (سيارات ومشاريع) والديسكورد في مكان واحد.",
       },
       { property: "og:title", content: "Austin Town CFW RP" },
       {
@@ -39,7 +39,7 @@ const tiles = [
     n: "02",
     en: "STORE",
     label: "المتجر",
-    desc: "سيارات • مشاريع • كازيات بالدولار",
+    desc: "سيارات • مشاريع",
     image: cars,
     icon: ShoppingBag,
   },

@@ -11,8 +11,10 @@ import workshopBay from "@/assets/workshop-bay.jpg";
 import nightclub from "@/assets/nightclub.jpg";
 import clubExterior from "@/assets/club-exterior.jpg";
 import clubVip from "@/assets/club-vip.jpg";
+import gunshopExterior from "@/assets/gunshop-exterior.jpg";
+import gunshopInterior from "@/assets/gunshop-interior.jpg";
+import gunshopRange from "@/assets/gunshop-range.jpg";
 import gasDowntown from "@/assets/gas-downtown.jpg";
-import gasHighway from "@/assets/gas-highway.jpg";
 import bugattiFront from "@/assets/bugatti-front.jpg";
 import bugattiRear from "@/assets/bugatti-rear.jpg";
 import bugattiCabin from "@/assets/bugatti-cabin.jpg";
@@ -26,13 +28,12 @@ import m4Front from "@/assets/m4-front.jpg";
 import m4Rear from "@/assets/m4-rear.jpg";
 import m4Cabin from "@/assets/m4-cabin.jpg";
 
-export type Category = "cars" | "projects" | "gas";
+export type Category = "cars" | "projects";
 
 export type StoreItem = {
   id: string;
   name: string;
   category: Category;
-  price: number;
   images: string[];
   tag?: string;
   short: string;
@@ -40,18 +41,9 @@ export type StoreItem = {
   details: string[];
 };
 
-export function formatUSD(amount: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
-
 export const categories: { id: Category; label: string; icon: string; image: string }[] = [
   { id: "cars", label: "السيارات", icon: "🏎️", image: cars },
   { id: "projects", label: "المشاريع", icon: "🏢", image: projects },
-  { id: "gas", label: "الكازيات", icon: "⛽", image: gas },
 ];
 
 export const storeItems: StoreItem[] = [
@@ -59,7 +51,6 @@ export const storeItems: StoreItem[] = [
     id: "car-1",
     name: "Bugatti Chiron",
     category: "cars",
-    price: 750000,
     images: [bugattiFront, bugattiRear, bugattiCabin],
     tag: "الأسرع",
     short: "وحش الشوارع، سرعة خرافية وثبات عالي في المطاردات.",
@@ -79,7 +70,6 @@ export const storeItems: StoreItem[] = [
     id: "car-2",
     name: "Nissan GT-R R35",
     category: "cars",
-    price: 220000,
     images: [gtrFront, gtrRear, gtrCabin],
     tag: "الأكثر طلباً",
     short: "خيار المحترفين للسباقات والدرفت في شوارع أوستن.",
@@ -98,7 +88,6 @@ export const storeItems: StoreItem[] = [
     id: "car-3",
     name: "Mercedes G63 AMG",
     category: "cars",
-    price: 300000,
     images: [g63Front, g63Rear, g63Cabin],
     short: "فخامة وقوة، مناسبة لعصابات المدينة ورجال الأعمال.",
     specs: [
@@ -113,9 +102,8 @@ export const storeItems: StoreItem[] = [
     id: "car-4",
     name: "BMW M4 Competition",
     category: "cars",
-    price: 185000,
     images: [m4Front, m4Rear, m4Cabin],
-    short: "توازن مثالي بين السرعة والتحكم بسعر منطقي.",
+    short: "توازن مثالي بين السرعة والتحكم.",
     specs: [
       { label: "السرعة القصوى", value: "٢٩٠ كم/س" },
       { label: "التسارع", value: "٣.٤ ثانية" },
@@ -128,12 +116,11 @@ export const storeItems: StoreItem[] = [
     id: "proj-1",
     name: "مطعم Austin Grill",
     category: "projects",
-    price: 1200000,
     images: [grillExterior, restaurant, grillKitchen],
     tag: "دخل ثابت",
     short: "مشروع مطعم كامل في وسط المدينة مع طاقم وسكربتات جاهزة.",
     specs: [
-      { label: "الدخل اليومي", value: formatUSD(80000) },
+      { label: "الدخل اليومي", value: "عبر الديسكورد" },
       { label: "عدد الوظائف", value: "٦ موظفين" },
       { label: "الموقع", value: "وسط المدينة" },
       { label: "الترخيص", value: "دائم" },
@@ -148,11 +135,10 @@ export const storeItems: StoreItem[] = [
     id: "proj-2",
     name: "ورشة تعديل سيارات",
     category: "projects",
-    price: 950000,
     images: [workshopExterior, workshop, workshopBay],
     short: "ورشة تيونينج مع كل أدوات التعديل والصيانة.",
     specs: [
-      { label: "الدخل اليومي", value: formatUSD(65000) },
+      { label: "الدخل اليومي", value: "عبر الديسكورد" },
       { label: "عدد الوظائف", value: "٤ موظفين" },
       { label: "الموقع", value: "المنطقة الصناعية" },
       { label: "الترخيص", value: "دائم" },
@@ -163,12 +149,11 @@ export const storeItems: StoreItem[] = [
     id: "proj-3",
     name: "نادي ليلي Neon Club",
     category: "projects",
-    price: 1800000,
     images: [clubExterior, nightclub, clubVip],
     tag: "VIP",
     short: "أشهر نادي في أوستن تاون، دخل ضخم وحضور دائم.",
     specs: [
-      { label: "الدخل اليومي", value: formatUSD(120000) },
+      { label: "الدخل اليومي", value: "عبر الديسكورد" },
       { label: "عدد الوظائف", value: "١٠ موظفين" },
       { label: "الموقع", value: "الواجهة البحرية" },
       { label: "الترخيص", value: "دائم" },
@@ -176,15 +161,14 @@ export const storeItems: StoreItem[] = [
     details: ["نظام حجز طاولات VIP.", "غرفة DJ ونظام إضاءة تفاعلي.", "أمن خاص للنادي."],
   },
   {
-    id: "gas-1",
+    id: "proj-4",
     name: "كازية Downtown",
-    category: "gas",
-    price: 750000,
+    category: "projects",
     images: [gasDowntown, gas, city],
     tag: "موقع ذهبي",
     short: "كازية في أكثر منطقة حركة داخل المدينة.",
     specs: [
-      { label: "الدخل اليومي", value: formatUSD(55000) },
+      { label: "الدخل اليومي", value: "عبر الديسكورد" },
       { label: "عدد المضخات", value: "٦" },
       { label: "متجر مرفق", value: "نعم" },
       { label: "الموقع", value: "Downtown" },
@@ -196,33 +180,22 @@ export const storeItems: StoreItem[] = [
     ],
   },
   {
-    id: "gas-2",
-    name: "كازية Highway 12",
-    category: "gas",
-    price: 520000,
-    images: [gasHighway, gas, city],
-    short: "على الطريق السريع، مثالية لمن يفضل الحركة السريعة.",
+    id: "proj-5",
+    name: "محل الأسلحة",
+    category: "projects",
+    images: [gunshopExterior, gunshopInterior, gunshopRange],
+    tag: "ترخيص رسمي",
+    short: "محل أسلحة رسمي داخل المدينة مع واجهة، معرض، ومدى رماية.",
     specs: [
-      { label: "الدخل اليومي", value: formatUSD(40000) },
-      { label: "عدد المضخات", value: "٤" },
-      { label: "متجر مرفق", value: "نعم" },
-      { label: "الموقع", value: "الطريق السريع" },
+      { label: "الدخل اليومي", value: "عبر الديسكورد" },
+      { label: "عدد الوظائف", value: "٤ موظفين" },
+      { label: "الموقع", value: "وسط المدينة" },
+      { label: "الترخيص", value: "دائم" },
     ],
-    details: ["مخزون وقود قابل للترقية.", "دخل إضافي من غسيل السيارات."],
-  },
-  {
-    id: "gas-3",
-    name: "كازية Sandy Shore",
-    category: "gas",
-    price: 390000,
-    images: [gas, gasHighway, city],
-    short: "بداية مناسبة للاعبين الجدد في عالم الأعمال.",
-    specs: [
-      { label: "الدخل اليومي", value: formatUSD(28000) },
-      { label: "عدد المضخات", value: "٣" },
-      { label: "متجر مرفق", value: "لا" },
-      { label: "الموقع", value: "ساندي شور" },
+    details: [
+      "بيع الأسلحة القانونية داخل اللعبة حسب قوانين المدينة.",
+      "يشمل مدى رماية خاص بالمحل.",
+      "إمكانية تعيين موظفين وتحديد الأسعار من لوحة المالك.",
     ],
-    details: ["أرخص كازية في المدينة.", "قابلة للبيع لاحقاً بنفس السعر."],
   },
 ];

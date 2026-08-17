@@ -4,7 +4,6 @@ import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, Images } from "lucide-react";
 import {
   categories,
-  formatUSD,
   storeItems,
   type Category,
   type StoreItem,
@@ -17,10 +16,10 @@ export const Route = createFileRoute("/store")({
       {
         name: "description",
         content:
-          "متجر مدينة أوستن تاون CFW RP: سيارات رياضية، مشاريع استثمارية وكازيات مع كل التفاصيل والأسعار.",
+          "متجر مدينة أوستن تاون CFW RP: سيارات رياضية ومشاريع استثمارية. لمعرفة الأسعار تواصل عبر الديسكورد.",
       },
       { property: "og:title", content: "متجر Austin Town CFW RP" },
-      { property: "og:description", content: "سيارات، مشاريع وكازيات بأسعار المدينة." },
+      { property: "og:description", content: "سيارات ومشاريع — الأسعار عبر الديسكورد." },
     ],
   }),
   component: StorePage,
@@ -42,7 +41,7 @@ function StorePage() {
           STORE
         </h1>
         <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-          جميع الأسعار بالدولار الأمريكي (USD) — اضغط على أي كرت لعرض التفاصيل
+          لمعرفة الأسعار تواصل عبر الديسكورد — اضغط على أي كرت لعرض التفاصيل
         </p>
       </div>
 
@@ -72,9 +71,7 @@ function StorePage() {
               <h2 className="font-display text-base tracking-wide">{item.name}</h2>
               <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{item.short}</p>
               <div className="mt-3 flex items-center justify-between">
-                <span dir="ltr" className="font-display text-sm text-accent neon-text">
-                  {formatUSD(item.price)}
-                </span>
+                <span className="text-xs text-accent">السعر عبر الديسكورد</span>
                 <span className="text-xs text-muted-foreground group-hover:text-accent">
                   التفاصيل ←
                 </span>
@@ -302,12 +299,14 @@ function ItemModal({ item, onClose }: { item: StoreItem; onClose: () => void }) 
         <div className="p-6 text-right">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-muted-foreground">{item.short}</p>
-            <span
-              dir="ltr"
-              className="rounded-xl bg-primary/25 px-4 py-2 font-display text-base text-foreground neon-ring"
+            <a
+              href="https://discord.gg/aust"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl bg-primary/25 px-4 py-2 text-sm text-foreground neon-ring"
             >
-              {formatUSD(item.price)}
-            </span>
+              السعر عبر الديسكورد
+            </a>
           </div>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -340,7 +339,7 @@ function ItemModal({ item, onClose }: { item: StoreItem; onClose: () => void }) 
             rel="noreferrer"
             className="mt-6 block rounded-xl bg-primary py-3 text-center font-display text-sm tracking-widest text-primary-foreground transition-transform duration-300 hover:-translate-y-0.5 neon-ring"
           >
-            الشراء عبر الديسكورد
+            الاستفسار والشراء عبر الديسكورد
           </a>
         </div>
       </div>
